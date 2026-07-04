@@ -1,0 +1,107 @@
+{
+  "name": "Daily Chennai Weather Email at 7 AM",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "c758f15a-d3d7-464b-a970-51f3a0b97754",
+      "name": "Every Morning at 7 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "cityName": "Chennai"
+      },
+      "id": "923c98c9-0352-4c2b-b6ca-64a0f36d2f27",
+      "name": "Fetch Chennai Weather",
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "77B0fo70GmgBWNVj",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "santhoshpece2004@gmail.com",
+        "subject": "=Weather Report for Chennai - {{ $now.toFormat(\"MMMM d, yyyy\") }}",
+        "message": "=<h2>Good Morning! Here's today's weather in Chennai:</h2>\n<p><strong>Temperature:</strong> {{ $json.main.temp }}°C (Feels like {{ $json.main.feels_like }}°C)</p>\n<p><strong>Conditions:</strong> {{ $json.weather[0].description }}</p>\n<p><strong>Humidity:</strong> {{ $json.main.humidity }}%</p>\n<p><strong>Wind Speed:</strong> {{ $json.wind.speed }} m/s</p>\n<p><strong>Pressure:</strong> {{ $json.main.pressure }} hPa</p>\n<hr>\n<p><em>Have a great day!</em></p>",
+        "options": {}
+      },
+      "id": "8b97e94f-8e2d-4527-93fc-2e18badb1b54",
+      "name": "Send Weather Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        304
+      ],
+      "webhookId": "6ac91bee-7f65-47a5-8dc4-1b25ac1e7b35",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "9ijg5c0Hol5fFF2n",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Morning at 7 AM": {
+      "main": [
+        [
+          {
+            "node": "Fetch Chennai Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Chennai Weather": {
+      "main": [
+        [
+          {
+            "node": "Send Weather Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "b08f7207-508b-470e-bdc3-3d3e8fe242e2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a186997a7a4b85ba5f402095ae107457bbb75843c9bf8f654c5e64392f3f72f6"
+  },
+  "nodeGroups": [],
+  "id": "ymC4K4MHpqj9r21l",
+  "tags": []
+}
